@@ -49,6 +49,7 @@ def get_song(request):
         
         if single_song:
             data = {
+                "id":single_song.id,
                 "image":single_song.album_image.url if single_song.album_image else None,
                 "name": single_song.name,
                 "url": single_song.album_song.url,
