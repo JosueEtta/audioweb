@@ -1,0 +1,80 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="node_modules/@fortawesome/fontawesome-free/css/all.min.css" preload>
+    <link rel="stylesheet" href="magic.min.css">
+    <link rel="stylesheet" href="{% static 'app/style/style.css' %}" preload>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"preload>
+    <script src="{% static 'app/style/play.js' %}" defer></script>
+    <script src="{% static 'app/style/tailwind.js' %}" defer></script>
+    <title>Video viewer</title>
+</head>
+
+<body class="flex md:flex-row">
+    <section id="music-play">
+        <div id="audio-img">
+
+        </div>
+        <div class="audio-container">
+            <audio id="audioPlayer">
+                <source
+                    src="" value="0">
+            </audio>
+        </div>
+
+        <div class="options">
+            <!-- <img src="./assets/images/heart-regular-full.svg" id="heart" alt="Heart" width="32">
+        <img src="./assets/images/repeat-solid-full.svg" alt="many option" width="32">
+        <img src="./assets/images/plus-solid-full.svg" alt="Plus" width="32">
+        <img src="./assets/images/list-solid-full.svg" alt="List" width="32">-->
+            <i class="fa-solid fa-heart" id="heart" style="font-size:32px;" onclick="addfavaourite()"></i>
+            <i class="fa-solid fa-repeat" style="font-size:32px;"></i>
+            <i class="fa-solid fa-image"  style="font-size:32px;" id="add-file2"></i>
+            <i class="fa-solid fa-list" style="font-size:32px;" id="list"></i>
+
+        </div>
+
+        <div class="controls">
+            <div class="timer">
+                <span id="currentTime">00:00</span> /
+                <span id="duration">00:00</span>
+            </div>
+            <input type="range" min="0" max="100" id="volumeControl" value="0">
+            <div id="control-img">
+                <i id="rewindBtn" class="fa-solid fa-backward-step" style="font-size:32px; cursor:pointer;"></i>
+                <i id="playBtn" class="fa-solid fa-play" style="font-size:32px; cursor:pointer; display:none;" onclick="playOrStopMusic()"></i>
+                <i id="pauseBtn" class="fa-solid fa-pause" style="font-size:32px; cursor:pointer; display:flex;" onclick="playOrStopMusic()"></i>
+                <i id="forwardBtn" class="fa-solid fa-forward-step" style="font-size:32px; cursor:pointer;"></i>
+            </div>
+        </div>
+    </section>
+    <section id="music-list" class="magictime slideRightReturn slideLeftReturn">
+         <div id="list-option">
+                <div class="tab">All</div>
+                <div class="tab">Favorite</div>
+            </div>
+          <ul class="song-list" >
+             {% for song in all_songs %}
+               <li onclick="getSong('{{ song.name|escapejs }}')" class="song-item">
+                 <span class="song-name">{{ song.name }}</span>
+                 <span class="song-duration">{{ song.duration|floatformat:0 }}s</span>
+               </li>
+             {% endfor %}  
+           </ul>
+        <div>
+            <form id="uploadForm" action="" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <input type="file" name="file" id="file" accept="audio/*"  class="hidden">
+            </form>
+                <input type="file" name="file" id="file2" accept="img/*"  class="hidden">
+             <button type="button" id="add-file" ><i class="fa-solid fa-plus"></i></button>
+        </div>
+      
+    </section>
+</body>
+
+</html>
