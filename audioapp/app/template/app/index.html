@@ -5,10 +5,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="node_modules/@fortawesome/fontawesome-free/css/all.min.css" preload>
-    <link rel="stylesheet" href="magic.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="{% static 'app/style/style.css' %}" preload>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"preload>
     <script src="{% static 'app/style/play.js' %}" defer></script>
     <script src="{% static 'app/style/tailwind.js' %}" defer></script>
     <title>Video viewer</title>
@@ -32,7 +30,23 @@
         <img src="./assets/images/plus-solid-full.svg" alt="Plus" width="32">
         <img src="./assets/images/list-solid-full.svg" alt="List" width="32">-->
             <i class="fa-solid fa-heart" id="heart" style="font-size:32px;" onclick="addfavaourite()"></i>
-            <i class="fa-solid fa-repeat" style="font-size:32px;" onclick="changeSequence('loop')"></i>
+            <!-- <i class="fa-solid fa-repeat-1"></i> -->
+             <svg 
+  class="repeat-1-icon control-btn repeat-1-btn" 
+  width="32" 
+  height="32" 
+  viewBox="0 0 24 24" 
+  xmlns="http://www.w3.org/2000/svg"
+  onclick="changeSequence()"
+  id="repeat-1-btn"
+>
+  <path d="M17 17H7V14L3 18L7 22V19H19V13H17V17Z" />
+  <path d="M7 7H17V10L21 6L17 2V5H5V11H7V7Z" />
+  <path d="M11 10H12V14H11V10Z" /> <!-- The "1" Digit -->
+  <path d="M12 14H13" /> 
+</svg>
+            <i class="fa-solid fa-shuffle control-btn" style="font-size:32px;" id=""  onclick="changeSequence()"></i>
+            <i class="fa-solid fa-repeat" style="font-size:32px;"  onclick="changeSequence()"></i>
             <i class="fa-solid fa-image"  style="font-size:32px;" id="add-file2"></i>
             <i class="fa-solid fa-list" style="font-size:32px;" id="list"></i>
 
@@ -46,16 +60,17 @@
             <input type="range" min="0" max="100" id="volumeControl" value="0">
             <div id="control-img">
                 <i id="rewindBtn" class="fa-solid fa-backward-step" style="font-size:32px; cursor:pointer;"></i>
-                <i id="playBtn" class="fa-solid fa-play" style="font-size:32px; cursor:pointer; display:none;" onclick="playOrStopMusic()"></i>
-                <i id="pauseBtn" class="fa-solid fa-pause" style="font-size:32px; cursor:pointer; display:flex;" onclick="playOrStopMusic()"></i>
+                <i id="playBtn" class="fa-solid fa-play" style="font-size:32px; cursor:pointer; " onclick="playOrStopMusic()"></i>
+                <i id="pauseBtn" class="fa-solid fa-pause" style="font-size:32px; cursor:pointer;" onclick="playOrStopMusic()"></i>
                 <i id="forwardBtn" class="fa-solid fa-forward-step" style="font-size:32px; cursor:pointer;"></i>
             </div>
         </div>
     </section>
     <section id="music-list" class="magictime slideRightReturn slideLeftReturn">
          <div id="list-option">
-                <div class="tab">All</div>
-                <div class="tab">Favorite</div>
+                <div class="tab active" data-tab="all">All</div>
+                <div class="tab" data-tab="favorite">Favorite</div>
+                <div class="tab-indicator"></div>
             </div>
           <ul class="song-list" >
              {% for song in all_songs %}

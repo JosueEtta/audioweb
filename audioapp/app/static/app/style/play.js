@@ -14,25 +14,59 @@ const fileInput2 = document.getElementById("file2");
 const currentTime = document.getElementById("currentTime");
 const songs = document.getElementsByClassName("song-name");
 const duration = document.getElementById("duration");
+const rewindBtn = document.querySelectorAll(".control-btn");
 let musicName = ""
 let playMode = "loop"
+const options = ["fa-repeat","fa-shuffle","repeat-1-btn"]
+let optionNumber = 0
 const songArray = Array.from(songs);
+
+// Tab switching functionality
+const tabs = document.querySelectorAll('.tab');
+const tabIndicator = document.querySelector('.tab-indicator');
+
+// Initialize tabs
+function initializeTabs() {
+    tabs.forEach((tab, index) => {
+        tab.addEventListener('click', () => switchTab(index));
+    });
+}
+
+function switchTab(tabIndex) {
+    // Remove active class from all tabs
+    tabs.forEach(tab => tab.classList.remove('active'));
+    
+    // Add active class to clicked tab
+    tabs[tabIndex].classList.add('active');
+    
+    // Move indicator with smooth animation
+    tabIndicator.style.transform = `translateX(${tabIndex * 100}%)`;
+}
+
+// Initialize tabs when DOM is loaded
+document.addEventListener('DOMContentLoaded', initializeTabs);
 
 // Toggle favourites
 // heart.addEventListener("click", () => {
 //     heart.style.color = (heart.style.color === "black" || heart.style.color === "") ? "#fa0a52" : "black";
 // });
 
+music.src = getSong(localStorage.getItem("musicName"))
+document.body.style.backgroundImage = `url(${localStorage.getItem("musicImageUrl")})`;
+audioImg.style.backgroundImage = `url(${localStorage.getItem("musicImageUrl")})`
+// music.paused = true; // Ensure music is paused on page load  
+playBtn.style.display = "flex";  // Show play
+pauseBtn.style.display = "none"; // Hide pause
 
 
 // Play and stop music
 function playOrStopMusic() {
     if (music.paused) {
+        console.log("Playing music",music.paused);
         pauseBtn.style.display = "flex";
         audioImg.classList.add("rotate");
         playBtn.style.display = "none";
         music.play();
-        console.log(range)
     } else {
         pauseBtn.style.display = "none";
         audioImg.classList.remove("rotate");
@@ -77,13 +111,9 @@ async function getSong(song) {
         // Remove playing class from all songs and add to current
         songArray.forEach(item => item.parentElement.classList.remove("playing"));
         songArray[currentIndex].parentElement.classList.add("playing");
-        // Update UI state to match playOrStopMusic logic
-        pauseBtn.style.display = "flex";
-        playBtn.style.display = "none";
-        audioImg.classList.add("rotate");
         duration.textContent = convertToMinutes(data.duration)
         heart.style.color = (data.isFavourite == true) ? "#fa0a52" : "black";
-        music.play();
+        // music.play();
     }
   } catch (error) {
     console.error("Error fetching song:", error);
@@ -121,8 +151,16 @@ async function addfavaourite() {
     }
 }
 
-function changeSequence(sequence = "loop") {
-    playMode = sequence;
+function changeSequence() {
+    // hide all sequence buttons first
+    document.querySelectorAll(".fa-repeat, .fa-shuffle, .repeat-1-btn").forEach(item => item.classList.add("control-btn"));
+    console.log("Current option number:", options[optionNumber]);
+    document.querySelector(`.${options[optionNumber]}`).classList.remove("control-btn");
+    playMode = options[optionNumber]
+    console.log("Current play mode:", playMode);
+    optionNumber++;
+    if (optionNumber >= options.length) optionNumber = 0;
+
 }
 
 
@@ -186,10 +224,10 @@ music.addEventListener("timeupdate",()=>{
 
 music.addEventListener("ended",()=>{
     let currentNumber = localStorage.getItem("id");
-    if (playMode === "loop") {
+    if (playMode === "fa-repeat") {
         let currentId = parseInt(localStorage.getItem("id"));
         let nextIndex = (currentId + 1 >= songs.length) ? 0 : currentId + 1;
-        
+
         // Remove playing class from all songs and add to next
         songArray.forEach(item => item.parentElement.classList.remove("playing"));
         songArray[nextIndex].parentElement.classList.add("playing");
@@ -201,6 +239,24 @@ music.addEventListener("ended",()=>{
         localStorage.setItem("musicName", songs[nextIndex].textContent); // Store the next song name for future use
         let next = songs[nextIndex].textContent
         getSong(next);
+    }
+    else if (playMode === "fa-shuffle ") {
+        let randomIndex = Math.floor(Math.random() * songs.length);
+        // Remove playing class from all songs and add to random
+        songArray.forEach(item => item.parentElement.classList.remove("playing"));
+        songArray[randomIndex].parentElement.classList.add("playing");
+        
+        // Update storage and play random
+        localStorage.setItem("id", randomIndex);
+        console.log("Playing random song with ID:", randomIndex);
+        console.log("Random song name:", songs[randomIndex].textContent);
+        localStorage.setItem("musicName", songs[randomIndex].textContent); // Store the random song name for future use
+        let random = songs[randomIndex].textContent
+        getSong(random);
+    }
+    else if(playMode === "repeat-1-btn"){
+        getSong(localStorage.getItem("musicName"));
+        music.play();
     }
 })
 

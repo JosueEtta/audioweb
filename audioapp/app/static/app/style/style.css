@@ -167,12 +167,13 @@ body {
 #control-img i:hover {
     transform: scale(1.15);
 }
+
+
 #music-list{
     display: block;
     flex-direction: column;
-    height: 100vh;
+    height:inherit;
     width:30%;
-    height: inherit;
     /* background: linear-gradient(90deg, #ecebf7 0%, #e4e5e7 100%); */
     border-radius: 10px;
     box-shadow: 0 2px 12px rgba(35,41,70,0.08);
@@ -183,21 +184,42 @@ body {
 #music-list #list-option{
     display: flex;
     flex-direction: row;
-    width: 100;
+    width: 100%;
+    position: relative;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 12px 12px 0 0;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
 }
 
 #list-option .tab{
     text-align: center;
-    font-size: 20px;
-    padding-top: 20px;
-    padding-bottom: 20px;
-    flex: 1;  /* Changed from width: 50% to flex: 1 for equal distribution */
-    border-bottom: solid;
-    border-color: #fa0a52;
+    font-size: 18px;
+    padding: 20px 16px;
+    flex: 1;
     cursor: pointer;
-    /* Add these for better flex behavior */
-    min-width: 0;
+    position: relative;
+    z-index: 2;
+    color:#333;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
     box-sizing: border-box;
+}
+
+
+
+#list-option .tab-indicator {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 3px;
+    background: #fa0a52;
+    border-radius: 2px;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    width: 50%;
+    z-index: 3;
+    box-shadow: 0 1px 3px rgba(250, 10, 82, 0.3);
 }
 #music-list i{
     font-size: xx-large;
@@ -264,6 +286,16 @@ body {
     /* #volumeControl remains unchanged for mobile */
 }
 
+  .repeat-1-icon {
+    cursor: pointer;
+    font-size: 32px;
+    transition: fill 0.2s ease-in-out;
+    fill: currentColor; /* Inherits text color, or set a default like black */
+  }
+
+  .repeat-1-icon:hover {
+    fill: #fa0a52;
+  }
 .song-list {
     flex: 1; /* This tells the list to take up all available middle space */
     overflow-y: auto; /* Show scrollbar only when content overflows */
@@ -314,4 +346,7 @@ body {
     font-size: 14px;
     color: #666;
     margin-left: 10px;
+}
+.control-btn{
+    display:none !important;
 }
