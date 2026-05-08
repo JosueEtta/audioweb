@@ -9,13 +9,28 @@ import time
 
 
 # Create your views here.
+def get_all_songs_view(request):
+    if request.method == "GET" and request.headers.get('Accept') == 'application/json':
+        songs = Song.objects.all()
+        song_data = []
+        for song in songs:
+            song_data.append({
+                "id": song.id,
+                "name": song.name,
+                "duration": song.duration,
+                "album_image": song.album_image.url if song.album_image else None,
+                "isfavourite": song.isfavourite,
+                "album_song": song.album_song.url
+            })
+        return JsonResponse({"all_songs": song_data})
+    else:
+        songs = Song.objects.all()
+        context = {"all_songs": songs}
+        return render(request, "app/index.html", context)
+
 def get_all_songs():
     songs = Song.objects.all()
-    info = {
-       "all_songs":songs
-       }
-    return info
-
+    return {"all_songs": songs}
 
 def index(request):
    context = get_all_songs()
@@ -73,3 +88,19 @@ def uploadImage(request):
         return JsonResponse({"imageUrl": song.album_image.url})
     else:
         return JsonResponse({"error": "Invalid request"}, status=400)
+
+def get_favourite(request):
+    songs = Song.objects.filter(isfavourite=True)
+    print("Here they are")
+    print(songs)
+    song_data = []
+    for song in songs:
+            song_data.append({
+                "id": song.id,
+                "name": song.name,
+                "duration": song.duration,
+                "album_image": song.album_image.url if song.album_image else None,
+                "isfavourite": song.isfavourite,
+                "album_song": song.album_song.url
+            })
+    return JsonResponse({"all_songs": song_data})
