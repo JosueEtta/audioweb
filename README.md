@@ -4,7 +4,7 @@ AudioWeb is a browser-based audio player built with **Python, Django, HTML, CSS,
 
 ## Screenshot
 
-![AudioWeb player interface](https://raw.githubusercontent.com/JosueEtta/Atabe-potfolio/main/images/audioapp.png)
+![AudioWeb player interface](https://raw.githubusercontent.com/JosueEtta/audioweb/main/screenshots/audioapp-interface.jpg)
 
 ## Features
 
